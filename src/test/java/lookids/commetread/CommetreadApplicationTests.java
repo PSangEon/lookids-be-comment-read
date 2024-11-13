@@ -1,10 +1,10 @@
-package lookids.commentRead;
+package lookids.commetread;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CommentReadApplicationTests {
+class CommetreadApplicationTests {
 
 	@Test
 	void contextLoads() {
