@@ -21,23 +21,27 @@ public class CommentReadEntity {
 	private String commentCode;
 	private String feedCode;
 	private String userUuid;
+	private String nickname;
+	private String tag;
+	private String profileImg;
 	private String content;
 	private String parentCommentCode;
-	private Boolean commentStatus;
 	private Instant createdAt;
 
 	@LastModifiedDate
 	private Instant updatedAt;
 
 	@Builder
-	public CommentReadEntity(String commentCode, String feedCode, String userUuid, String content, Instant createdAt,
-		String parentCommentCode, Boolean commentStatus) {
+	public CommentReadEntity(String commentCode, String feedCode, String userUuid, String nickname, String tag,
+		String profileImg, String content, Instant createdAt, String parentCommentCode) {
 		this.commentCode = commentCode;
 		this.feedCode = feedCode;
 		this.userUuid = userUuid;
+		this.nickname = nickname;
+		this.tag = tag;
+		this.profileImg = profileImg;
 		this.content = content;
 		this.createdAt = createdAt;
 		this.parentCommentCode = parentCommentCode;
-		this.commentStatus = commentStatus;
 	}
 }

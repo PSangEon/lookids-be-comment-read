@@ -17,17 +17,20 @@ public class CommentKafkaVoMapper {
 			.content(commentEventVo.getContent())
 			.parentCommentCode(commentEventVo.getParentCommentCode())
 			.createdAt(commentEventVo.getCreatedAt())
+			.nickname(commentEventVo.getNickname())
+			.tag(commentEventVo.getTag())
+			.image(commentEventVo.getImage())
 			.build();
 	}
 
-	public CommentEvent toCommentEvent(CommentEventVo commentEventVo) {
+	public CommentEvent toCommentEvent(CommentEventVo commentEvent) {
 		return CommentEvent.builder()
-			.commentCode(commentEventVo.getCommentCode())
-			.feedCode(commentEventVo.getFeedCode())
-			.userUuid(commentEventVo.getUserUuid())
-			.content(commentEventVo.getContent())
-			.createdAt(commentEventVo.getCreatedAt())
-			.parentCommentCode(commentEventVo.getParentCommentCode())
+			.commentCode(commentEvent.getCommentCode())
+			.feedCode(commentEvent.getFeedCode())
+			.userUuid(commentEvent.getUserUuid())
+			.content(commentEvent.getContent())
+			.createdAt(commentEvent.getCreatedAt())
+			.parentCommentCode(commentEvent.getParentCommentCode())
 			.build();
 	}
 }

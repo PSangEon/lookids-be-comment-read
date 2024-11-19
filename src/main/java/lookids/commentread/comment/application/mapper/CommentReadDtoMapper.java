@@ -16,6 +16,9 @@ public class CommentReadDtoMapper {
 			.content(commentForRead.getContent())
 			.createdAt(commentForRead.getCreatedAt())
 			.parentCommentCode(commentForRead.getParentCommentCode())
+			.nickname(commentForRead.getNickname())
+			.tag(commentForRead.getTag())
+			.image(commentForRead.getImage())
 			.build();
 	}
 

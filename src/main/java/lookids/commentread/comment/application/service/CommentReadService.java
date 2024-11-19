@@ -24,6 +24,9 @@ public class CommentReadService implements CommentReadUseCase {
 			.content(commentCreateEventDto.getContent())
 			.createdAt(commentCreateEventDto.getCreatedAt())
 			.parentCommentCode(commentCreateEventDto.getParentCommentCode())
+			.nickname(commentCreateEventDto.getNickname())
+			.tag(commentCreateEventDto.getTag())
+			.image(commentCreateEventDto.getImage())
 			.build();
 		commentRepositoryPort.createComment(commentReadDtoMapper.toCommentReadSaveDto(commentForRead));
 	}

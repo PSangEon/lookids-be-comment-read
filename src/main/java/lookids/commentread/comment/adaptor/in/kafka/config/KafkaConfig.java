@@ -15,7 +15,8 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
-import lookids.commentread.comment.adaptor.in.kafka.vo.CommentEventVo;
+import lookids.commentread.comment.adaptor.in.kafka.event.CommentEvent;
+import lookids.commentread.comment.adaptor.in.kafka.event.UserProfileEvent;
 
 @EnableKafka
 @Configuration
@@ -25,7 +26,7 @@ public class KafkaConfig {
 	private String bootstrapServers;
 
 	@Bean
-	public ConsumerFactory<String, CommentEventVo> commentConsumerFactory() {
+	public ConsumerFactory<String, CommentEvent> commentConsumerFactory() {
 		Map<String, Object> props = new HashMap<>();
 		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
 		props.put(ConsumerConfig.GROUP_ID_CONFIG, "comment-read-group");
@@ -35,13 +36,34 @@ public class KafkaConfig {
 		//props.put(JsonDeserializer.TYPE_MAPPINGS, "lookids.commentread.comment.adaptor.in.kafka.vo.CommentEventVo");
 
 		return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(),
-			new ErrorHandlingDeserializer<>(new JsonDeserializer<>(CommentEventVo.class, false)));
+			new ErrorHandlingDeserializer<>(new JsonDeserializer<>(CommentEvent.class, false)));
 	}
 
 	@Bean
-	public ConcurrentKafkaListenerContainerFactory<String, CommentEventVo> commentEventListenerContainerFactory() {
-		ConcurrentKafkaListenerContainerFactory<String, CommentEventVo> factory = new ConcurrentKafkaListenerContainerFactory<>();
+	public ConcurrentKafkaListenerContainerFactory<String, CommentEvent> commentEventListenerContainerFactory() {
+		ConcurrentKafkaListenerContainerFactory<String, CommentEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(commentConsumerFactory());
+		return factory;
+	}
+
+	@Bean
+	public ConsumerFactory<String, UserProfileEvent> userProfileConsumerFactory() {
+		Map<String, Object> props = new HashMap<>();
+		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+		props.put(ConsumerConfig.GROUP_ID_CONFIG, "comment-read-group");
+		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+		props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+		//props.put(JsonDeserializer.TYPE_MAPPINGS, "lookids.commentread.comment.adaptor.in.kafka.vo.CommentEventVo");
+
+		return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(),
+			new ErrorHandlingDeserializer<>(new JsonDeserializer<>(UserProfileEvent.class, false)));
+	}
+
+	@Bean
+	public ConcurrentKafkaListenerContainerFactory<String, UserProfileEvent> userProfileEventListenerContainerFactory() {
+		ConcurrentKafkaListenerContainerFactory<String, UserProfileEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(userProfileConsumerFactory());
 		return factory;
 	}
 
