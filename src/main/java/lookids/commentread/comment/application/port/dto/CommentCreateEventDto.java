@@ -18,12 +18,11 @@ public class CommentCreateEventDto {
 	private String parentCommentCode;
 	private Instant createdAt;
 	private String nickname;
-	private String tag;
 	private String image;
 
 	@Builder
 	public CommentCreateEventDto(String commentCode, String feedCode, String userUuid, String content,
-		String parentCommentCode, LocalDateTime createdAt, String nickname, String tag, String image) {
+		String parentCommentCode, LocalDateTime createdAt, String nickname, String image) {
 		this.commentCode = commentCode;
 		this.feedCode = feedCode;
 		this.userUuid = userUuid;
@@ -31,7 +30,6 @@ public class CommentCreateEventDto {
 		this.parentCommentCode = parentCommentCode;
 		this.createdAt = createdAt.atZone(ZoneId.of("UTC")).toInstant();
 		this.nickname = nickname;
-		this.tag = tag;
 		this.image = image;
 	}
 }

@@ -21,6 +21,5 @@ public class CommentEventVo {
 	private LocalDateTime createdAt;
 	private String parentCommentCode;
 	private String nickname;
-	private String tag;
 	private String image;
 }

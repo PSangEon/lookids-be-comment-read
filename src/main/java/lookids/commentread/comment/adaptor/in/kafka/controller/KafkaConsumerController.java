@@ -41,7 +41,7 @@ public class KafkaConsumerController {
 
 	@KafkaListener(topics = "comment-create-join-user", groupId = "comment-read-group", containerFactory = "userProfileEventListenerContainerFactory")
 	public void createUserProfile(UserProfileEvent userProfileEvent) {
-		String userUuid = userProfileEvent.getUserUuid();
+		String userUuid = userProfileEvent.getUuid();
 		CompletableFuture<UserProfileEvent> userProfileEventFuture = userProfileEventFutureMap.computeIfAbsent(userUuid,
 			key -> new CompletableFuture<>());
 
@@ -67,7 +67,6 @@ public class KafkaConsumerController {
 						.createdAt(commentEvent.getCreatedAt())
 						.parentCommentCode(commentEvent.getParentCommentCode())
 						.nickname(userProfileEvent.getNickname())
-						.tag(userProfileEvent.getTag())
 						.image(userProfileEvent.getImage())
 						.build()));
 

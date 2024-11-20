@@ -17,12 +17,11 @@ public class CommentForRead {
 	private Instant createdAt;
 	private String updatedAt;
 	private String nickname;
-	private String tag;
 	private String image;
 
 	@Builder
 	public CommentForRead(String commentCode, String feedCode, String userUuid, String content, Instant createdAt,
-		String parentCommentCode, String updatedAt, String nickname, String tag, String image) {
+		String parentCommentCode, String updatedAt, String nickname, String image) {
 		this.commentCode = commentCode;
 		this.feedCode = feedCode;
 		this.userUuid = userUuid;
@@ -31,7 +30,6 @@ public class CommentForRead {
 		this.parentCommentCode = parentCommentCode;
 		this.updatedAt = updatedAt;
 		this.nickname = nickname;
-		this.tag = tag;
 		this.image = image;
 	}
 

@@ -16,12 +16,11 @@ public class CommentReadSaveDto {
 	private String parentCommentCode;
 	private Instant createdAt;
 	private String nickname;
-	private String tag;
 	private String image;
 
 	@Builder
 	public CommentReadSaveDto(String commentCode, String feedCode, String userUuid, String content,
-		String parentCommentCode, Instant createdAt, String nickname, String tag, String image) {
+		String parentCommentCode, Instant createdAt, String nickname, String image) {
 		this.commentCode = commentCode;
 		this.feedCode = feedCode;
 		this.userUuid = userUuid;
@@ -29,7 +28,6 @@ public class CommentReadSaveDto {
 		this.parentCommentCode = parentCommentCode;
 		this.createdAt = createdAt;
 		this.nickname = nickname;
-		this.tag = tag;
 		this.image = image;
 	}
 }

@@ -19,7 +19,6 @@ public class CommentEntityMapper {
 			.parentCommentCode(commentReadSaveDto.getParentCommentCode())
 			.createdAt(commentReadSaveDto.getCreatedAt())
 			.nickname(commentReadSaveDto.getNickname())
-			.tag(commentReadSaveDto.getTag())
 			.profileImg(commentReadSaveDto.getImage())
 			.build();
 

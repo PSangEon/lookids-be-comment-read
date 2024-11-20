@@ -20,7 +20,6 @@ public class CommentReadDtoMapper {
 			.createdAt(commentForRead.getCreatedAt())
 			.parentCommentCode(commentForRead.getParentCommentCode())
 			.nickname(commentForRead.getNickname())
-			.tag(commentForRead.getTag())
 			.image(commentForRead.getImage())
 			.build();
 	}
@@ -40,7 +39,6 @@ public class CommentReadDtoMapper {
 			.parentCommentCode(commentReadEntity.getParentCommentCode())
 			.userUuid(commentReadEntity.getUserUuid())
 			.nickname(commentReadEntity.getNickname())
-			.tag(commentReadEntity.getTag())
 			.image(commentReadEntity.getProfileImg())
 			.build();
 	}

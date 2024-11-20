@@ -9,16 +9,14 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 public class UserProfileEvent {
-	private String userUuid;
+	private String uuid;
 	private String nickname;
-	private String tag;
 	private String image;
 
 	@Builder
-	public UserProfileEvent(String userUuid, String nickname, String tag, String image) {
-		this.userUuid = userUuid;
+	public UserProfileEvent(String uuid, String nickname, String image) {
+		this.uuid = uuid;
 		this.nickname = nickname;
-		this.tag = tag;
 		this.image = image;
 	}
 

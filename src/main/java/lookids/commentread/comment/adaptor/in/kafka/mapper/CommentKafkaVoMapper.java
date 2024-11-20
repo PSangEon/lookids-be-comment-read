@@ -17,7 +17,6 @@ public class CommentKafkaVoMapper {
 			.parentCommentCode(commentEventVo.getParentCommentCode())
 			.createdAt(commentEventVo.getCreatedAt())
 			.nickname(commentEventVo.getNickname())
-			.tag(commentEventVo.getTag())
 			.image(commentEventVo.getImage())
 			.build();
 	}
