@@ -2,7 +2,6 @@ package lookids.commentread.comment.adaptor.in.kafka.mapper;
 
 import org.springframework.stereotype.Component;
 
-import lookids.commentread.comment.adaptor.in.kafka.event.CommentEvent;
 import lookids.commentread.comment.adaptor.in.kafka.vo.CommentEventVo;
 import lookids.commentread.comment.application.port.dto.CommentCreateEventDto;
 
@@ -20,17 +19,6 @@ public class CommentKafkaVoMapper {
 			.nickname(commentEventVo.getNickname())
 			.tag(commentEventVo.getTag())
 			.image(commentEventVo.getImage())
-			.build();
-	}
-
-	public CommentEvent toCommentEvent(CommentEventVo commentEvent) {
-		return CommentEvent.builder()
-			.commentCode(commentEvent.getCommentCode())
-			.feedCode(commentEvent.getFeedCode())
-			.userUuid(commentEvent.getUserUuid())
-			.content(commentEvent.getContent())
-			.createdAt(commentEvent.getCreatedAt())
-			.parentCommentCode(commentEvent.getParentCommentCode())
 			.build();
 	}
 }
