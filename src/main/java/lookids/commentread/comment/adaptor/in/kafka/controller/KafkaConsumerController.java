@@ -39,7 +39,7 @@ public class KafkaConsumerController {
 		checkAndCreateFeedEventListener(userUuid);
 	}
 
-	@KafkaListener(topics = "comment-create-join-user", groupId = "comment-read-group", containerFactory = "userProfileEventListenerContainerFactory")
+	@KafkaListener(topics = "comment-create-join-userprofile", groupId = "comment-read-group", containerFactory = "userProfileEventListenerContainerFactory")
 	public void createUserProfile(UserProfileEvent userProfileEvent) {
 		String userUuid = userProfileEvent.getUuid();
 		CompletableFuture<UserProfileEvent> userProfileEventFuture = userProfileEventFutureMap.computeIfAbsent(userUuid,
