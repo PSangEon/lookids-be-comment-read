@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class CommentCreateEventDto {
+public class ReplyCreateEventDto {
 	private String commentCode;
-	private String feedCode;
+	private String parentCommentCode;
 	private String userUuid;
 	private String content;
 	private Instant createdAt;
@@ -20,10 +20,10 @@ public class CommentCreateEventDto {
 	private String image;
 
 	@Builder
-	public CommentCreateEventDto(String commentCode, String feedCode, String userUuid, String content,
+	public ReplyCreateEventDto(String commentCode, String parentCommentCode, String userUuid, String content,
 		LocalDateTime createdAt, String nickname, String image) {
 		this.commentCode = commentCode;
-		this.feedCode = feedCode;
+		this.parentCommentCode = parentCommentCode;
 		this.userUuid = userUuid;
 		this.content = content;
 		this.createdAt = createdAt.atZone(ZoneId.of("UTC")).toInstant();

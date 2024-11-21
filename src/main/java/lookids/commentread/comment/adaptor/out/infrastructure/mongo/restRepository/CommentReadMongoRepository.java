@@ -1,5 +1,7 @@
 package lookids.commentread.comment.adaptor.out.infrastructure.mongo.restRepository;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -12,5 +14,7 @@ public interface CommentReadMongoRepository extends MongoRepository<CommentReadE
 	Page<CommentReadEntity> findByFeedCode(String feedCode, Pageable pageable);
 
 	Page<CommentReadEntity> findByParentCommentCode(String parentCommentCode, Pageable pageable);
+
+	Optional<CommentReadEntity> findByCommentCode(String commentCode);
 
 }

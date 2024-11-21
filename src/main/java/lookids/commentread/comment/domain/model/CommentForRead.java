@@ -1,6 +1,7 @@
 package lookids.commentread.comment.domain.model;
 
 import java.time.Instant;
+import java.util.List;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,24 +14,24 @@ public class CommentForRead {
 	private String feedCode;
 	private String userUuid;
 	private String content;
-	private String parentCommentCode;
 	private Instant createdAt;
 	private String updatedAt;
 	private String nickname;
 	private String image;
+	private List<ReplyForRead> replyForReadList;
 
 	@Builder
 	public CommentForRead(String commentCode, String feedCode, String userUuid, String content, Instant createdAt,
-		String parentCommentCode, String updatedAt, String nickname, String image) {
+		String updatedAt, String nickname, String image, List<ReplyForRead> replyForReadList) {
 		this.commentCode = commentCode;
 		this.feedCode = feedCode;
 		this.userUuid = userUuid;
 		this.content = content;
 		this.createdAt = createdAt;
-		this.parentCommentCode = parentCommentCode;
 		this.updatedAt = updatedAt;
 		this.nickname = nickname;
 		this.image = image;
+		this.replyForReadList = replyForReadList;
 	}
 
 }

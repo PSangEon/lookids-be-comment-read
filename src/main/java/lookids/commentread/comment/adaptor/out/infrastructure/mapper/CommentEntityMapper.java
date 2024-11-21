@@ -16,7 +16,6 @@ public class CommentEntityMapper {
 			.feedCode(commentReadSaveDto.getFeedCode())
 			.userUuid(commentReadSaveDto.getUserUuid())
 			.content(commentReadSaveDto.getContent())
-			.parentCommentCode(commentReadSaveDto.getParentCommentCode())
 			.createdAt(commentReadSaveDto.getCreatedAt())
 			.nickname(commentReadSaveDto.getNickname())
 			.profileImg(commentReadSaveDto.getImage())

@@ -15,16 +15,14 @@ public class CommentReadResponseDto {
 	private String nickname;
 	private String image;
 	private String content;
-	private String parentCommentCode;
 	private Instant createdAt;
 
 	@Builder
-	public CommentReadResponseDto(String commentCode, String userUuid, String content, String parentCommentCode,
-		Instant createdAt, String nickname, String image) {
+	public CommentReadResponseDto(String commentCode, String userUuid, String content, Instant createdAt,
+		String nickname, String image) {
 		this.commentCode = commentCode;
 		this.userUuid = userUuid;
 		this.content = content;
-		this.parentCommentCode = parentCommentCode;
 		this.createdAt = createdAt.atZone(ZoneId.of("UTC")).toInstant();
 		this.nickname = nickname;
 		this.image = image;

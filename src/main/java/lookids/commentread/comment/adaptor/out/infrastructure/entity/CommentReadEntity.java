@@ -1,6 +1,7 @@
 package lookids.commentread.comment.adaptor.out.infrastructure.entity;
 
 import java.time.Instant;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -24,15 +25,16 @@ public class CommentReadEntity {
 	private String nickname;
 	private String profileImg;
 	private String content;
-	private String parentCommentCode;
 	private Instant createdAt;
+
+	private List<ReplyEntity> replyList;
 
 	@LastModifiedDate
 	private Instant updatedAt;
 
 	@Builder
 	public CommentReadEntity(String commentCode, String feedCode, String userUuid, String nickname, String profileImg,
-		String content, Instant createdAt, String parentCommentCode) {
+		String content, Instant createdAt, List<ReplyEntity> replyList) {
 		this.commentCode = commentCode;
 		this.feedCode = feedCode;
 		this.userUuid = userUuid;
@@ -40,6 +42,6 @@ public class CommentReadEntity {
 		this.profileImg = profileImg;
 		this.content = content;
 		this.createdAt = createdAt;
-		this.parentCommentCode = parentCommentCode;
+		this.replyList = replyList;
 	}
 }

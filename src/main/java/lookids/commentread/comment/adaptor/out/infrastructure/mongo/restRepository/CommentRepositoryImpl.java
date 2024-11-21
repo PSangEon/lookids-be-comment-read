@@ -1,5 +1,7 @@
 package lookids.commentread.comment.adaptor.out.infrastructure.mongo.restRepository;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -8,7 +10,6 @@ import org.springframework.stereotype.Repository;
 import lombok.RequiredArgsConstructor;
 import lookids.commentread.comment.adaptor.out.infrastructure.entity.CommentReadEntity;
 import lookids.commentread.comment.adaptor.out.infrastructure.mapper.CommentEntityMapper;
-import lookids.commentread.comment.application.port.dto.CommentListSaveDto;
 import lookids.commentread.comment.application.port.dto.CommentReadSaveDto;
 import lookids.commentread.comment.application.port.out.CommentRepositoryPort;
 
@@ -23,11 +24,6 @@ public class CommentRepositoryImpl implements CommentRepositoryPort {
 	@Override
 	public void createComment(CommentReadSaveDto commentReadSaveDto) {
 		mongoTemplate.save(commentEntityMapper.toEntity(commentReadSaveDto));
-	}
-
-	@Override
-	public void updateCommentList(CommentListSaveDto commentListSaveDto) {
-		//mongoTemplate.save(commentEntityMapper.toEntity(commentListSaveDto));
 	}
 
 	@Override
@@ -48,5 +44,9 @@ public class CommentRepositoryImpl implements CommentRepositoryPort {
 	@Override
 	public Page<CommentReadEntity> readRelyList(String parentCommentCode, Pageable pageable) {
 		return commentReadMongoRepository.findByParentCommentCode(parentCommentCode, pageable);
+	}
+
+	public Optional<CommentReadEntity> readComment(String commentCode) {
+		return commentReadMongoRepository.findByCommentCode(commentCode);
 	}
 }
