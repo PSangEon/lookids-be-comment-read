@@ -70,7 +70,8 @@ public class CommentRepositoryImpl implements CommentRepositoryPort {
 	}
 
 	public Page<CommentForRead> readUserComment(String userUuid, Pageable pageable) {
-		return commentEntityMapper.toDomainPage(commentReadMongoRepository.findByUuid(userUuid, pageable));
+		//return commentEntityMapper.toDomainPage(commentReadMongoRepository.findByUuid(userUuid, pageable));
+		return null;
 	}
 
 }
