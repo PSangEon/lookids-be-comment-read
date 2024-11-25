@@ -12,11 +12,13 @@ public class UserProfileEvent {
 	private String uuid;
 	private String nickname;
 	private String image;
+	private String tag;
 
 	@Builder
-	public UserProfileEvent(String uuid, String nickname, String image) {
+	public UserProfileEvent(String uuid, String nickname, String image, String tag) {
 		this.uuid = uuid;
 		this.nickname = nickname;
+		this.tag = tag;
 		this.image = image;
 	}
 

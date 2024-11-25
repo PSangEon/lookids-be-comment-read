@@ -21,6 +21,7 @@ public class CommentEntityMapper {
 			.content(commentReadSaveDto.getContent())
 			.createdAt(commentReadSaveDto.getCreatedAt())
 			.nickname(commentReadSaveDto.getNickname())
+			.tag(commentReadSaveDto.getTag())
 			.profileImg(commentReadSaveDto.getImage())
 			.replyList(commentReadSaveDto.getReplyForReadList())
 			.build();
@@ -35,6 +36,7 @@ public class CommentEntityMapper {
 			.content(commentReadUpdateDto.getContent())
 			.createdAt(commentReadUpdateDto.getCreatedAt())
 			.nickname(commentReadUpdateDto.getNickname())
+			.tag(commentReadUpdateDto.getTag())
 			.profileImg(commentReadUpdateDto.getImage())
 			.replyList(commentReadUpdateDto.getReplyForReadList())
 			.build();
@@ -49,6 +51,7 @@ public class CommentEntityMapper {
 			.content(commentReadEntity.getContent())
 			.createdAt(commentReadEntity.getCreatedAt())
 			.nickname(commentReadEntity.getNickname())
+			.tag(commentReadEntity.getTag())
 			.image(commentReadEntity.getProfileImg())
 			.replyForReadList(commentReadEntity.getReplyList())
 			.build();
@@ -64,6 +67,7 @@ public class CommentEntityMapper {
 			.content(commentReadEntity.getContent())
 			.createdAt(commentReadEntity.getCreatedAt())
 			.nickname(commentReadEntity.getNickname())
+			.tag(commentReadEntity.getTag())
 			.image(commentReadEntity.getProfileImg())
 			.build());
 	}

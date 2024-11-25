@@ -15,6 +15,7 @@ public class WebVoMapper {
 			.createdAt(commentReadResponseDto.getCreatedAt())
 			.userUuid(commentReadResponseDto.getUserUuid())
 			.nickname(commentReadResponseDto.getNickname())
+			.tag(commentReadResponseDto.getTag())
 			.image(commentReadResponseDto.getImage())
 			.build();
 	}

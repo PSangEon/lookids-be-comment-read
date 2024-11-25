@@ -11,6 +11,7 @@ public class CommentReadResponseVo {
 	private String commentCode;
 	private String userUuid;
 	private String nickname;
+	private String tag;
 	private String image;
 	private String content;
 	private Instant createdAt;
