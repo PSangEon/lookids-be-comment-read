@@ -24,6 +24,7 @@ public class CommentReadEntity {
 	private String feedCode;
 	private String userUuid;
 	private String nickname;
+	private String tag;
 	private String profileImg;
 	private String content;
 	private Instant createdAt;
@@ -35,12 +36,13 @@ public class CommentReadEntity {
 
 	@Builder
 	public CommentReadEntity(String id, String commentCode, String feedCode, String userUuid, String nickname,
-		String profileImg, String content, Instant createdAt, List<ReplyForRead> replyList) {
+		String tag, String profileImg, String content, Instant createdAt, List<ReplyForRead> replyList) {
 		this.id = id;
 		this.commentCode = commentCode;
 		this.feedCode = feedCode;
 		this.userUuid = userUuid;
 		this.nickname = nickname;
+		this.tag = tag;
 		this.profileImg = profileImg;
 		this.content = content;
 		this.createdAt = createdAt;

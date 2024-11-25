@@ -11,10 +11,12 @@ import lombok.ToString;
 public class NicknameEvent {
 	private String uuid;
 	private String nickname;
+	private String tag;
 
 	@Builder
-	public NicknameEvent(String uuid, String nickname) {
+	public NicknameEvent(String uuid, String nickname, String tag) {
 		this.uuid = uuid;
 		this.nickname = nickname;
+		this.tag = tag;
 	}
 }

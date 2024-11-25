@@ -29,6 +29,7 @@ public class CommentReadDtoMapper {
 			.userUuid(commentForRead.getUserUuid())
 			.createdAt(commentForRead.getCreatedAt())
 			.nickname(commentForRead.getNickname())
+			.tag(commentForRead.getTag())
 			.image(commentForRead.getImage())
 			.replyForReadList(commentForRead.getReplyForReadList())
 			.build();
@@ -43,6 +44,7 @@ public class CommentReadDtoMapper {
 			.userUuid(commentForRead.getUserUuid())
 			.createdAt(commentForRead.getCreatedAt())
 			.nickname(commentForRead.getNickname())
+			.tag(commentForRead.getTag())
 			.image(commentForRead.getImage())
 			.replyForReadList(commentForRead.getReplyForReadList())
 			.build();
@@ -56,6 +58,7 @@ public class CommentReadDtoMapper {
 			.userUuid(commentForRead.getUserUuid())
 			.createdAt(commentForRead.getCreatedAt())
 			.nickname(commentForRead.getNickname())
+			.tag(commentForRead.getTag())
 			.image(commentForRead.getImage())
 			.replyForReadList(replyForReadList)
 			.build();
@@ -68,6 +71,7 @@ public class CommentReadDtoMapper {
 			.createdAt(commentForRead.getCreatedAt())
 			.userUuid(commentForRead.getUserUuid())
 			.nickname(commentForRead.getNickname())
+			.tag(commentForRead.getTag())
 			.image(commentForRead.getImage())
 			.build();
 	}
@@ -79,6 +83,7 @@ public class CommentReadDtoMapper {
 			.createdAt(replyForRead.getCreatedAt())
 			.userUuid(replyForRead.getUserUuid())
 			.nickname(replyForRead.getNickname())
+			.tag(replyForRead.getTag())
 			.image(replyForRead.getProfileImg())
 			.build();
 	}
@@ -91,6 +96,7 @@ public class CommentReadDtoMapper {
 			.content(commentEvent.getContent())
 			.createdAt(commentEvent.getCreatedAt())
 			.nickname(userProfileEvent.getNickname())
+			.tag(userProfileEvent.getTag())
 			.image(userProfileEvent.getImage())
 			.build();
 	}
@@ -103,6 +109,7 @@ public class CommentReadDtoMapper {
 			.content(replyEvent.getContent())
 			.createdAt(replyEvent.getCreatedAt())
 			.nickname(userProfileEvent.getNickname())
+			.tag(userProfileEvent.getTag())
 			.image(userProfileEvent.getImage())
 			.build();
 	}
@@ -111,6 +118,7 @@ public class CommentReadDtoMapper {
 		return UserProfileNicknameDto.builder()
 			.userUuid(nicknameEvent.getUuid())
 			.nickname(nicknameEvent.getNickname())
+			.tag(nicknameEvent.getTag())
 			.build();
 	}
 
