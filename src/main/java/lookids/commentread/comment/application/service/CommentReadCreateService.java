@@ -1,19 +1,20 @@
 package lookids.commentread.comment.application.service;
 
+import java.util.ArrayList;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import lookids.commentread.comment.adaptor.out.infrastructure.entity.CommentReadEntity;
-import lookids.commentread.comment.adaptor.out.infrastructure.entity.ReplyEntity;
+import lombok.extern.slf4j.Slf4j;
 import lookids.commentread.comment.application.mapper.CommentReadDtoMapper;
 import lookids.commentread.comment.application.port.dto.CommentCreateEventDto;
 import lookids.commentread.comment.application.port.dto.ReplyCreateEventDto;
 import lookids.commentread.comment.application.port.in.CommentReadCreateUseCase;
 import lookids.commentread.comment.application.port.out.CommentRepositoryPort;
 import lookids.commentread.comment.domain.model.CommentForRead;
-import lookids.commentread.common.entity.BaseResponseStatus;
-import lookids.commentread.common.exception.BaseException;
+import lookids.commentread.comment.domain.model.ReplyForRead;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class CommentReadCreateService implements CommentReadCreateUseCase {
@@ -30,17 +31,18 @@ public class CommentReadCreateService implements CommentReadCreateUseCase {
 			.userUuid(commentCreateEventDto.getUserUuid())
 			.nickname(commentCreateEventDto.getNickname())
 			.image(commentCreateEventDto.getImage())
+			.replyForReadList(new ArrayList<>())
 			.build();
 		commentRepositoryPort.createComment(commentReadDtoMapper.toCommentReadSaveDto(commentForRead));
 	}
 
 	@Override
 	public void createReplyRead(ReplyCreateEventDto commentCreateEventDto) {
-		CommentReadEntity commentReadEntity = commentRepositoryPort.readComment(
-				commentCreateEventDto.getParentCommentCode())
-			.orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_DATA));
+		log.info("commentCreateEventDto:{}", commentCreateEventDto);
+		CommentForRead commentForRead = commentRepositoryPort.readComment(commentCreateEventDto.getParentCommentCode());
+		log.info("commentForRead:{}", commentForRead);
 
-		ReplyEntity replyEntity = ReplyEntity.builder()
+		ReplyForRead replyForRead = ReplyForRead.builder()
 			.commentCode(commentCreateEventDto.getCommentCode())
 			.content(commentCreateEventDto.getContent())
 			.createdAt(commentCreateEventDto.getCreatedAt())
@@ -48,7 +50,8 @@ public class CommentReadCreateService implements CommentReadCreateUseCase {
 			.nickname(commentCreateEventDto.getNickname())
 			.profileImg(commentCreateEventDto.getImage())
 			.build();
-		commentReadEntity.getReplyList().add(replyEntity);
-		//commentRepositoryPort.createComment(commentReadDtoMapper.toCommentReadSaveDto());
+		commentForRead.getReplyForReadList().add(replyForRead);
+		log.info("reply:{}", commentForRead.getReplyForReadList());
+		commentRepositoryPort.updateComment(commentReadDtoMapper.toCommentReadUpdateDto(commentForRead));
 	}
 }

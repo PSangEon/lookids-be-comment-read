@@ -13,7 +13,7 @@ import lookids.commentread.comment.adaptor.out.infrastructure.entity.CommentRead
 public interface CommentReadMongoRepository extends MongoRepository<CommentReadEntity, String> {
 	Page<CommentReadEntity> findByFeedCode(String feedCode, Pageable pageable);
 
-	Page<CommentReadEntity> findByParentCommentCode(String parentCommentCode, Pageable pageable);
+	Page<CommentReadEntity> findByUserUuid(String userUuid, Pageable pageable);
 
 	Optional<CommentReadEntity> findByCommentCode(String commentCode);
 

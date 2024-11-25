@@ -9,11 +9,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import lookids.commentread.comment.adaptor.out.infrastructure.entity.CommentReadEntity;
 import lookids.commentread.comment.application.mapper.CommentReadDtoMapper;
 import lookids.commentread.comment.application.port.dto.CommentReadResponseDto;
 import lookids.commentread.comment.application.port.in.CommentReadUseCase;
 import lookids.commentread.comment.application.port.out.CommentRepositoryPort;
+import lookids.commentread.comment.domain.model.CommentForRead;
 import lookids.commentread.common.dto.PageResponseDto;
 
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class CommentReadService implements CommentReadUseCase {
 	@Override
 	public PageResponseDto readCommentList(String feedCode, int page, int size) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-		Page<CommentReadEntity> commentList = commentRepositoryPort.readCommentList(feedCode, pageable);
+		Page<CommentForRead> commentList = commentRepositoryPort.readCommentList(feedCode, pageable);
 
 		List<CommentReadResponseDto> responseDtoList = commentList.stream()
 			.map(commentReadDtoMapper::toCommentReadResponseDto) // 메서드 참조 사용
@@ -35,14 +35,12 @@ public class CommentReadService implements CommentReadUseCase {
 	}
 
 	@Override
-	public PageResponseDto readReplyList(String parentCommentCode, int page, int size) {
-		Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-		Page<CommentReadEntity> commentList = commentRepositoryPort.readRelyList(parentCommentCode, pageable);
+	public List<CommentReadResponseDto> readReplyList(String parentCommentCode) {
+		CommentForRead commentForRead = commentRepositoryPort.readComment(parentCommentCode);
 
-		List<CommentReadResponseDto> responseDtoList = commentList.stream()
-			.map(commentReadDtoMapper::toCommentReadResponseDto) // 메서드 참조 사용
+		return commentForRead.getReplyForReadList()
+			.stream()
+			.map(commentReadDtoMapper::toReplyReadResponseDto) // 메서드 참조 사용
 			.toList();
-
-		return PageResponseDto.toDto(page, commentList.getTotalPages(), commentList.hasNext(), responseDtoList);
 	}
 }

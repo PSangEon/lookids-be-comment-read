@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lookids.commentread.comment.domain.model.ReplyForRead;
 
 @Getter
 @NoArgsConstructor
@@ -27,14 +28,15 @@ public class CommentReadEntity {
 	private String content;
 	private Instant createdAt;
 
-	private List<ReplyEntity> replyList;
+	private List<ReplyForRead> replyList;
 
 	@LastModifiedDate
 	private Instant updatedAt;
 
 	@Builder
-	public CommentReadEntity(String commentCode, String feedCode, String userUuid, String nickname, String profileImg,
-		String content, Instant createdAt, List<ReplyEntity> replyList) {
+	public CommentReadEntity(String id, String commentCode, String feedCode, String userUuid, String nickname,
+		String profileImg, String content, Instant createdAt, List<ReplyForRead> replyList) {
+		this.id = id;
 		this.commentCode = commentCode;
 		this.feedCode = feedCode;
 		this.userUuid = userUuid;

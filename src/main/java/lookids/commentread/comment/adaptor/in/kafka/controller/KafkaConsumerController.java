@@ -9,10 +9,13 @@ import org.springframework.stereotype.Component;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lookids.commentread.comment.adaptor.in.kafka.event.CommentEvent;
+import lookids.commentread.comment.adaptor.in.kafka.event.NicknameEvent;
+import lookids.commentread.comment.adaptor.in.kafka.event.ProfileImageEvent;
 import lookids.commentread.comment.adaptor.in.kafka.event.ReplyEvent;
 import lookids.commentread.comment.adaptor.in.kafka.event.UserProfileEvent;
 import lookids.commentread.comment.application.mapper.CommentReadDtoMapper;
 import lookids.commentread.comment.application.port.in.CommentReadCreateUseCase;
+import lookids.commentread.comment.application.port.in.UserProfileUpdateUseCase;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,15 +24,27 @@ public class KafkaConsumerController {
 
 	private final CommentReadCreateUseCase commentReadCreateUseCase;
 
+	private final UserProfileUpdateUseCase userProfileUpdateUseCase;
+
 	private final CommentReadDtoMapper commentReadDtoMapper;
 
 	private final ConcurrentHashMap<String, CompletableFuture<CommentEvent>> commentEventFutureMap = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<String, CompletableFuture<UserProfileEvent>> userProfileEventFutureMap = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<String, CompletableFuture<ReplyEvent>> replyCommentEventFutureMap = new ConcurrentHashMap<>(); // 대댓글을 위한 맵 추가
 
+	@KafkaListener(topics = "userprofile-nickname-update", groupId = "comment-read-group", containerFactory = "nicknameEventListenerContainerFactory")
+	public void consumeNicknameEvent(NicknameEvent nicknameEvent) {
+		userProfileUpdateUseCase.updateNickname(commentReadDtoMapper.toNicknameDto(nicknameEvent));
+	}
+
+	@KafkaListener(topics = "userprofile-image-update", groupId = "comment-read-group", containerFactory = "profileImageEventListenerContainerFactory")
+	public void consumeNicknameEvent(ProfileImageEvent profileImageEvent) {
+		userProfileUpdateUseCase.updateProfileImage(commentReadDtoMapper.toProfileImageDto(profileImageEvent));
+	}
+
 	@KafkaListener(topics = "comment-create", groupId = "comment-read-group", containerFactory = "commentEventListenerContainerFactory")
 	public void consumeCommentEvent(CommentEvent commentEvent) {
-		String userUuid = commentEvent.getUserUuid();
+		String userUuid = commentEvent.getUuid();
 		CompletableFuture<CommentEvent> feedEventFuture = commentEventFutureMap.computeIfAbsent(userUuid,
 			key -> new CompletableFuture<>());
 
@@ -55,7 +70,7 @@ public class KafkaConsumerController {
 	// 대댓글을 처리하는 리스너
 	@KafkaListener(topics = "comment-reply-create", groupId = "comment-read-group", containerFactory = "replyEventListenerContainerFactory")
 	public void consumeReplyEvent(ReplyEvent replyEvent) {
-		String userUuid = replyEvent.getUserUuid();
+		String userUuid = replyEvent.getUuid();
 		CompletableFuture<ReplyEvent> replyEventFuture = replyCommentEventFutureMap.computeIfAbsent(userUuid,
 			key -> new CompletableFuture<>());
 
@@ -101,6 +116,7 @@ public class KafkaConsumerController {
 		CompletableFuture<ReplyEvent> replyEventFuture = replyCommentEventFutureMap.get(userUuid); // 대댓글 처리
 
 		if (userProfileEventFuture != null && replyEventFuture != null) {
+			log.info("aaaaa");
 			userProfileEventFuture.thenCombine(replyEventFuture, (userProfileEvent, replyEvent) -> {
 				// 대댓글 처리
 				commentReadCreateUseCase.createReplyRead(

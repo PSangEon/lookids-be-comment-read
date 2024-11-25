@@ -18,7 +18,7 @@ public class CommentCreateEventDto {
 	private Instant createdAt;
 	private String nickname;
 	private String image;
-
+	
 	@Builder
 	public CommentCreateEventDto(String commentCode, String feedCode, String userUuid, String content,
 		LocalDateTime createdAt, String nickname, String image) {

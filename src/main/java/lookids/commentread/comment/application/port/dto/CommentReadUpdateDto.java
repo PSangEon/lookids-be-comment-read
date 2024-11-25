@@ -10,7 +10,8 @@ import lookids.commentread.comment.domain.model.ReplyForRead;
 
 @Getter
 @NoArgsConstructor
-public class CommentReadSaveDto {
+public class CommentReadUpdateDto {
+	private String id;
 	private String commentCode;
 	private String feedCode;
 	private String userUuid;
@@ -21,8 +22,9 @@ public class CommentReadSaveDto {
 	private List<ReplyForRead> replyForReadList;
 
 	@Builder
-	public CommentReadSaveDto(String commentCode, String feedCode, String userUuid, String content, Instant createdAt,
-		String nickname, String image, List<ReplyForRead> replyForReadList) {
+	public CommentReadUpdateDto(String id, String commentCode, String feedCode, String userUuid, String content,
+		Instant createdAt, String nickname, String image, List<ReplyForRead> replyForReadList) {
+		this.id = id;
 		this.commentCode = commentCode;
 		this.feedCode = feedCode;
 		this.userUuid = userUuid;

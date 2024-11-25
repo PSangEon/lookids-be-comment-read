@@ -14,15 +14,15 @@ public class CommentEvent {
 
 	private String commentCode;
 	private String feedCode;
-	private String userUuid;
+	private String uuid;
 	private String content;
 	private LocalDateTime createdAt;
 
 	@Builder
-	public CommentEvent(String commentCode, String feedCode, String userUuid, String content, LocalDateTime createdAt) {
+	public CommentEvent(String commentCode, String feedCode, String uuid, String content, LocalDateTime createdAt) {
 		this.commentCode = commentCode;
 		this.feedCode = feedCode;
-		this.userUuid = userUuid;
+		this.uuid = uuid;
 		this.content = content;
 		this.createdAt = createdAt;
 	}

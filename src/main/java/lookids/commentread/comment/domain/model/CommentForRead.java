@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class CommentForRead {
+	private String id;
 	private String commentCode;
 	private String feedCode;
 	private String userUuid;
@@ -21,8 +22,9 @@ public class CommentForRead {
 	private List<ReplyForRead> replyForReadList;
 
 	@Builder
-	public CommentForRead(String commentCode, String feedCode, String userUuid, String content, Instant createdAt,
-		String updatedAt, String nickname, String image, List<ReplyForRead> replyForReadList) {
+	public CommentForRead(String id, String commentCode, String feedCode, String userUuid, String content,
+		Instant createdAt, String updatedAt, String nickname, String image, List<ReplyForRead> replyForReadList) {
+		this.id = id;
 		this.commentCode = commentCode;
 		this.feedCode = feedCode;
 		this.userUuid = userUuid;

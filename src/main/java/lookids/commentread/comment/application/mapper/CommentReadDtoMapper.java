@@ -1,16 +1,23 @@
 package lookids.commentread.comment.application.mapper;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import lookids.commentread.comment.adaptor.in.kafka.event.CommentEvent;
+import lookids.commentread.comment.adaptor.in.kafka.event.NicknameEvent;
+import lookids.commentread.comment.adaptor.in.kafka.event.ProfileImageEvent;
 import lookids.commentread.comment.adaptor.in.kafka.event.ReplyEvent;
 import lookids.commentread.comment.adaptor.in.kafka.event.UserProfileEvent;
-import lookids.commentread.comment.adaptor.out.infrastructure.entity.CommentReadEntity;
 import lookids.commentread.comment.application.port.dto.CommentCreateEventDto;
 import lookids.commentread.comment.application.port.dto.CommentReadResponseDto;
 import lookids.commentread.comment.application.port.dto.CommentReadSaveDto;
+import lookids.commentread.comment.application.port.dto.CommentReadUpdateDto;
 import lookids.commentread.comment.application.port.dto.ReplyCreateEventDto;
+import lookids.commentread.comment.application.port.dto.UserProfileImageDto;
+import lookids.commentread.comment.application.port.dto.UserProfileNicknameDto;
 import lookids.commentread.comment.domain.model.CommentForRead;
+import lookids.commentread.comment.domain.model.ReplyForRead;
 
 @Component
 public class CommentReadDtoMapper {
@@ -23,17 +30,56 @@ public class CommentReadDtoMapper {
 			.createdAt(commentForRead.getCreatedAt())
 			.nickname(commentForRead.getNickname())
 			.image(commentForRead.getImage())
+			.replyForReadList(commentForRead.getReplyForReadList())
 			.build();
 	}
 
-	public CommentReadResponseDto toCommentReadResponseDto(CommentReadEntity commentReadEntity) {
+	public CommentReadUpdateDto toCommentReadUpdateDto(CommentForRead commentForRead) {
+		return CommentReadUpdateDto.builder()
+			.id(commentForRead.getId())
+			.commentCode(commentForRead.getCommentCode())
+			.feedCode(commentForRead.getFeedCode())
+			.content(commentForRead.getContent())
+			.userUuid(commentForRead.getUserUuid())
+			.createdAt(commentForRead.getCreatedAt())
+			.nickname(commentForRead.getNickname())
+			.image(commentForRead.getImage())
+			.replyForReadList(commentForRead.getReplyForReadList())
+			.build();
+	}
+
+	public CommentReadSaveDto toReplyReadSaveDto(CommentForRead commentForRead, List<ReplyForRead> replyForReadList) {
+		return CommentReadSaveDto.builder()
+			.commentCode(commentForRead.getCommentCode())
+			.feedCode(commentForRead.getFeedCode())
+			.content(commentForRead.getContent())
+			.userUuid(commentForRead.getUserUuid())
+			.createdAt(commentForRead.getCreatedAt())
+			.nickname(commentForRead.getNickname())
+			.image(commentForRead.getImage())
+			.replyForReadList(replyForReadList)
+			.build();
+	}
+
+	public CommentReadResponseDto toCommentReadResponseDto(CommentForRead commentForRead) {
 		return CommentReadResponseDto.builder()
-			.commentCode(commentReadEntity.getCommentCode())
-			.content(commentReadEntity.getContent())
-			.createdAt(commentReadEntity.getCreatedAt())
-			.userUuid(commentReadEntity.getUserUuid())
-			.nickname(commentReadEntity.getNickname())
-			.image(commentReadEntity.getProfileImg())
+			.commentCode(commentForRead.getCommentCode())
+			.content(commentForRead.getContent())
+			.createdAt(commentForRead.getCreatedAt())
+			.userUuid(commentForRead.getUserUuid())
+			.nickname(commentForRead.getNickname())
+			.image(commentForRead.getImage())
+			.build();
+	}
+
+	public CommentReadResponseDto toReplyReadResponseDto(ReplyForRead replyForRead) {
+		return CommentReadResponseDto.builder()
+			.commentCode(replyForRead.getCommentCode())
+			.content(replyForRead.getContent())
+			.createdAt(replyForRead.getCreatedAt())
+			.userUuid(replyForRead.getUserUuid())
+			.nickname(replyForRead.getNickname())
+			.image(replyForRead.getProfileImg())
 			.build();
 	}
 
@@ -41,7 +87,7 @@ public class CommentReadDtoMapper {
 		return CommentCreateEventDto.builder()
 			.commentCode(commentEvent.getCommentCode())
 			.feedCode(commentEvent.getFeedCode())
-			.userUuid(commentEvent.getUserUuid())
+			.userUuid(commentEvent.getUuid())
 			.content(commentEvent.getContent())
 			.createdAt(commentEvent.getCreatedAt())
 			.nickname(userProfileEvent.getNickname())
@@ -53,11 +99,25 @@ public class CommentReadDtoMapper {
 		return ReplyCreateEventDto.builder()
 			.commentCode(replyEvent.getCommentCode())
 			.parentCommentCode(replyEvent.getParentCommentCode())
-			.userUuid(replyEvent.getUserUuid())
+			.userUuid(replyEvent.getUuid())
 			.content(replyEvent.getContent())
 			.createdAt(replyEvent.getCreatedAt())
 			.nickname(userProfileEvent.getNickname())
 			.image(userProfileEvent.getImage())
+			.build();
+	}
+
+	public UserProfileNicknameDto toNicknameDto(NicknameEvent nicknameEvent) {
+		return UserProfileNicknameDto.builder()
+			.userUuid(nicknameEvent.getUuid())
+			.nickname(nicknameEvent.getNickname())
+			.build();
+	}
+
+	public UserProfileImageDto toProfileImageDto(ProfileImageEvent profileImageEvent) {
+		return UserProfileImageDto.builder()
+			.userUuid(profileImageEvent.getUuid())
+			.image(profileImageEvent.getImage())
 			.build();
 	}
 }
