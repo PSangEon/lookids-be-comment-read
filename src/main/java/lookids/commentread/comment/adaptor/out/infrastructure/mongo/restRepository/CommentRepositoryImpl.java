@@ -92,7 +92,7 @@ public class CommentRepositoryImpl implements CommentRepositoryPort {
 
 	public void updateReplyCount(String parentCommentCode, int change) {
 		mongoTemplate.updateFirst(Query.query(Criteria.where("commentCode").is(parentCommentCode)),
-			new Update().inc("replyCount", change), "comments");
+			new Update().inc("replyCount", change), "comment_entity");
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class CommentRepositoryImpl implements CommentRepositoryPort {
 	public void deleteComment(CommentDeleteSaveDto commentDeleteSaveDto) {
 		// 댓글과 대댓글을 포함한 삭제
 		mongoTemplate.remove(Query.query(Criteria.where("commentCode").is(commentDeleteSaveDto.getCommentCode())),
-			"comments");
+			"comment_entity");
 		updateFeedCommentCount(commentDeleteSaveDto.getFeedCode(), -commentDeleteSaveDto.getTotalToDelete());
 	}
 
@@ -111,7 +111,7 @@ public class CommentRepositoryImpl implements CommentRepositoryPort {
 		mongoTemplate.updateFirst(
 			Query.query(Criteria.where("replyList.commentCode").is(replyDeleteDto.getCommentCode())),
 			new Update().pull("replyList",
-				Query.query(Criteria.where("commentCode").is(replyDeleteDto.getCommentCode()))), "comments");
+				Query.query(Criteria.where("commentCode").is(replyDeleteDto.getCommentCode()))), "comment_entity");
 		updateReplyCount(replyDeleteDto.getParentCommentCode(), -1);
 	}
 }

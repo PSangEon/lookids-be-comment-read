@@ -23,6 +23,7 @@ public class CommentEntityMapper {
 			.nickname(commentReadSaveDto.getNickname())
 			.tag(commentReadSaveDto.getTag())
 			.profileImg(commentReadSaveDto.getImage())
+			.replyCount(commentReadSaveDto.getReplyCount())
 			.replyList(commentReadSaveDto.getReplyForReadList())
 			.build();
 	}
@@ -38,6 +39,7 @@ public class CommentEntityMapper {
 			.nickname(commentReadUpdateDto.getNickname())
 			.tag(commentReadUpdateDto.getTag())
 			.profileImg(commentReadUpdateDto.getImage())
+			.replyCount(commentReadUpdateDto.getReplyCount())
 			.replyList(commentReadUpdateDto.getReplyForReadList())
 			.build();
 	}
@@ -53,6 +55,7 @@ public class CommentEntityMapper {
 			.nickname(commentReadEntity.getNickname())
 			.tag(commentReadEntity.getTag())
 			.image(commentReadEntity.getProfileImg())
+			.replyCount(commentReadEntity.getReplyCount())
 			.replyForReadList(commentReadEntity.getReplyList())
 			.build();
 	}
