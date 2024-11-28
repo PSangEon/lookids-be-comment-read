@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mongodb.client.model.UpdateOptions;
 
@@ -35,12 +36,14 @@ public class CommentRepositoryImpl implements CommentRepositoryPort {
 	private final CommentReadMongoRepository commentReadMongoRepository;
 
 	@Override
+	@Transactional
 	public void createComment(CommentReadSaveDto commentReadSaveDto) {
 		mongoTemplate.save(commentEntityMapper.toEntity(commentReadSaveDto));
 		updateFeedCommentCount(commentReadSaveDto.getFeedCode(), 1);
 	}
 
 	@Override
+	@Transactional
 	public void updateComment(CommentReadUpdateDto commentReadUpdateDto) {
 		mongoTemplate.save(commentEntityMapper.toUpdateEntity(commentReadUpdateDto));
 		updateFeedCommentCount(commentReadUpdateDto.getFeedCode(), 1);
@@ -87,7 +90,13 @@ public class CommentRepositoryImpl implements CommentRepositoryPort {
 		mongoTemplate.upsert(feedQuery, update, "feed_entity");
 	}
 
+	public void updateReplyCount(String parentCommentCode, int change) {
+		mongoTemplate.updateFirst(Query.query(Criteria.where("commentCode").is(parentCommentCode)),
+			new Update().inc("replyCount", change), "comments");
+	}
+
 	@Override
+	@Transactional
 	public void deleteComment(CommentDeleteSaveDto commentDeleteSaveDto) {
 		// 댓글과 대댓글을 포함한 삭제
 		mongoTemplate.remove(Query.query(Criteria.where("commentCode").is(commentDeleteSaveDto.getCommentCode())),
@@ -96,12 +105,13 @@ public class CommentRepositoryImpl implements CommentRepositoryPort {
 	}
 
 	@Override
+	@Transactional
 	public void deleteReply(ReplyDeleteDto replyDeleteDto) {
 		// replyList에서 특정 대댓글 삭제
 		mongoTemplate.updateFirst(
 			Query.query(Criteria.where("replyList.commentCode").is(replyDeleteDto.getCommentCode())),
 			new Update().pull("replyList",
 				Query.query(Criteria.where("commentCode").is(replyDeleteDto.getCommentCode()))), "comments");
+		updateReplyCount(replyDeleteDto.getParentCommentCode(), -1);
 	}
-
 }
