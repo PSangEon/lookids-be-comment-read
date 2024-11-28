@@ -131,7 +131,6 @@ public class KafkaConsumerController {
 		CompletableFuture<ReplyEvent> replyEventFuture = replyCommentEventFutureMap.get(userUuid); // 대댓글 처리
 
 		if (userProfileEventFuture != null && replyEventFuture != null) {
-			log.info("aaaaa");
 			userProfileEventFuture.thenCombine(replyEventFuture, (userProfileEvent, replyEvent) -> {
 				// 대댓글 처리
 				commentReadCreateUseCase.createReplyRead(

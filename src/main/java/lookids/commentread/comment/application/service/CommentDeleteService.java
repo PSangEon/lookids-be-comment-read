@@ -40,7 +40,7 @@ public class CommentDeleteService implements CommentDeleteUseCase {
 		commentRepositoryPort.deleteReply(replyDeleteDto);
 
 		// 대댓글을 포함한 댓글의 feedCode를 사용하여 피드의 댓글 수 갱신
-		String feedCode = commentRepositoryPort.getFeedCodeByComment(replyDeleteDto.getCommentCode());
+		String feedCode = commentRepositoryPort.getFeedCodeByComment(replyDeleteDto.getParentCommentCode());
 		if (feedCode != null) {
 			commentRepositoryPort.updateFeedCommentCount(feedCode, -1);
 		}
