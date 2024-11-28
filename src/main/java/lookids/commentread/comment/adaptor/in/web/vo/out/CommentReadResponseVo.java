@@ -15,4 +15,5 @@ public class CommentReadResponseVo {
 	private String image;
 	private String content;
 	private Instant createdAt;
+	private Integer replyCount;
 }

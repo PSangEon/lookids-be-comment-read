@@ -32,6 +32,7 @@ public class CommentReadCreateService implements CommentReadCreateUseCase {
 			.nickname(commentCreateEventDto.getNickname())
 			.image(commentCreateEventDto.getImage())
 			.replyForReadList(new ArrayList<>())
+			.replyCount(0)
 			.build();
 		commentRepositoryPort.createComment(commentReadDtoMapper.toCommentReadSaveDto(commentForRead));
 	}
@@ -52,6 +53,7 @@ public class CommentReadCreateService implements CommentReadCreateUseCase {
 			.build();
 		commentForRead.getReplyForReadList().add(replyForRead);
 		log.info("reply:{}", commentForRead.getReplyForReadList());
-		commentRepositoryPort.updateComment(commentReadDtoMapper.toCommentReadUpdateDto(commentForRead));
+		commentRepositoryPort.updateComment(
+			commentReadDtoMapper.toCommentReadUpdateDto(commentForRead, commentForRead.getReplyForReadList().size()));
 	}
 }

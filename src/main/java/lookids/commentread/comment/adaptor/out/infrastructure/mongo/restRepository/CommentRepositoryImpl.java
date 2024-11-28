@@ -19,8 +19,7 @@ import lookids.commentread.comment.adaptor.out.infrastructure.entity.CommentRead
 import lookids.commentread.comment.adaptor.out.infrastructure.mapper.CommentEntityMapper;
 import lookids.commentread.comment.application.port.dto.CommentReadSaveDto;
 import lookids.commentread.comment.application.port.dto.CommentReadUpdateDto;
-import lookids.commentread.comment.application.port.dto.UserProfileImageDto;
-import lookids.commentread.comment.application.port.dto.UserProfileNicknameDto;
+import lookids.commentread.comment.application.port.dto.UserProfileUpdateSaveDto;
 import lookids.commentread.comment.application.port.out.CommentRepositoryPort;
 import lookids.commentread.comment.domain.model.CommentForRead;
 
@@ -36,25 +35,18 @@ public class CommentRepositoryImpl implements CommentRepositoryPort {
 	@Override
 	public void createComment(CommentReadSaveDto commentReadSaveDto) {
 		mongoTemplate.save(commentEntityMapper.toEntity(commentReadSaveDto));
+		updateFeedCommentCount(commentReadSaveDto.getFeedCode(), 1);
 	}
 
 	@Override
 	public void updateComment(CommentReadUpdateDto commentReadUpdateDto) {
 		mongoTemplate.save(commentEntityMapper.toUpdateEntity(commentReadUpdateDto));
+		updateFeedCommentCount(commentReadUpdateDto.getFeedCode(), 1);
 	}
 
 	@Override
 	public Page<CommentForRead> readCommentList(String feedCode, Pageable pageable) {
-		// Query query = new Query();
-		// query.addCriteria(Criteria.where("feedCode").is(feedCode));
-		//
-		// // 페이지네이션 적용
-		// long total = mongoTemplate.count(query, CommentReadEntity.class, "comment_entity");
-		// query.with(pageable);
-		//
-		// List<CommentReadEntity> commentList = mongoTemplate.find(query, CommentReadEntity.class, "comment_entity");
-		//
-		// return new PageImpl<>(commentList, pageable, total);
+
 		return commentEntityMapper.toDomainPage(commentReadMongoRepository.findByFeedCode(feedCode, pageable));
 	}
 
@@ -80,30 +72,21 @@ public class CommentRepositoryImpl implements CommentRepositoryPort {
 	}
 
 	@Override
-	public void updateUserNickname(UserProfileNicknameDto userProfileNicknameDto) {
-		Update update = new Update().set("nickname", userProfileNicknameDto.getNickname())
-			.set("tag", userProfileNicknameDto.getTag());
-		updateFieldsInCommentsAndReplies(userProfileNicknameDto.getUserUuid(), update);
-	}
-
-	@Override
-	public void updateUserImage(UserProfileImageDto userProfileImageDto) {
-		Update update = new Update().set("profileImg", userProfileImageDto.getImage());
-		updateFieldsInCommentsAndReplies(userProfileImageDto.getUserUuid(), update);
-	}
-
-	private void updateFieldsInCommentsAndReplies(String userUuid, Update update) {
-		// 댓글 갱신
-		Query commentQuery = new Query(Criteria.where("userUuid").is(userUuid));
-		mongoTemplate.updateMulti(commentQuery, update, "comment_entity");
+	public void updateUserProfile(UserProfileUpdateSaveDto userProfileUpdateSaveDto) {
+		Query commentQuery = new Query(Criteria.where("userUuid").is(userProfileUpdateSaveDto.getUserUuid()));
+		mongoTemplate.updateMulti(commentQuery, userProfileUpdateSaveDto.getUpdate(), "comment_entity");
 
 		// 대댓글 갱신
-		Query replyQuery = new Query(Criteria.where("replyList.userUuid").is(userUuid));
-
-		// 배열 필터 설정
-		UpdateOptions options = new UpdateOptions().arrayFilters(List.of(new Document("elem.userUuid", userUuid)));
-
+		Query replyQuery = new Query(Criteria.where("replyList.userUuid").is(userProfileUpdateSaveDto.getUserUuid()));
+		UpdateOptions options = new UpdateOptions().arrayFilters(
+			List.of(new Document("elem.userUuid", userProfileUpdateSaveDto.getUserUuid())));
 		mongoTemplate.getCollection("comment_entity")
-			.updateMany(replyQuery.getQueryObject(), update.getUpdateObject(), options);
+			.updateMany(replyQuery.getQueryObject(), userProfileUpdateSaveDto.getUpdate().getUpdateObject(), options);
+	}
+
+	public void updateFeedCommentCount(String feedCode, int change) {
+		Query feedQuery = new Query(Criteria.where("feedCode").is(feedCode));
+		Update update = new Update().inc("totalCommentCount", change); // totalCommentCount 증감
+		mongoTemplate.upsert(feedQuery, update, "feed_entity");
 	}
 }

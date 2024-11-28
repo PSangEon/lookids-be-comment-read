@@ -19,11 +19,12 @@ public class CommentReadSaveDto {
 	private String nickname;
 	private String tag;
 	private String image;
+	private Integer replyCount;
 	private List<ReplyForRead> replyForReadList;
 
 	@Builder
 	public CommentReadSaveDto(String commentCode, String feedCode, String userUuid, String content, Instant createdAt,
-		String nickname, String image, List<ReplyForRead> replyForReadList, String tag) {
+		String nickname, String image, List<ReplyForRead> replyForReadList, String tag, Integer replyCount) {
 		this.commentCode = commentCode;
 		this.feedCode = feedCode;
 		this.userUuid = userUuid;
@@ -33,5 +34,6 @@ public class CommentReadSaveDto {
 		this.tag = tag;
 		this.image = image;
 		this.replyForReadList = replyForReadList;
+		this.replyCount = replyCount;
 	}
 }

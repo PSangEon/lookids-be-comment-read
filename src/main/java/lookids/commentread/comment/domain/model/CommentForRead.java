@@ -20,12 +20,13 @@ public class CommentForRead {
 	private String nickname;
 	private String tag;
 	private String image;
+	private Integer replyCount;
 	private List<ReplyForRead> replyForReadList;
 
 	@Builder
 	public CommentForRead(String id, String commentCode, String feedCode, String userUuid, String content,
 		Instant createdAt, String updatedAt, String nickname, String image, List<ReplyForRead> replyForReadList,
-		String tag) {
+		String tag, Integer replyCount) {
 		this.id = id;
 		this.commentCode = commentCode;
 		this.feedCode = feedCode;
@@ -37,6 +38,7 @@ public class CommentForRead {
 		this.tag = tag;
 		this.image = image;
 		this.replyForReadList = replyForReadList;
+		this.replyCount = replyCount;
 	}
 
 }

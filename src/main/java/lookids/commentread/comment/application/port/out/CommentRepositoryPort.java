@@ -5,8 +5,7 @@ import org.springframework.data.domain.Pageable;
 
 import lookids.commentread.comment.application.port.dto.CommentReadSaveDto;
 import lookids.commentread.comment.application.port.dto.CommentReadUpdateDto;
-import lookids.commentread.comment.application.port.dto.UserProfileImageDto;
-import lookids.commentread.comment.application.port.dto.UserProfileNicknameDto;
+import lookids.commentread.comment.application.port.dto.UserProfileUpdateSaveDto;
 import lookids.commentread.comment.domain.model.CommentForRead;
 
 public interface CommentRepositoryPort {
@@ -15,9 +14,7 @@ public interface CommentRepositoryPort {
 
 	void updateComment(CommentReadUpdateDto commentReadUpdateDto);
 
-	void updateUserNickname(UserProfileNicknameDto userProfileNicknameDto);
-
-	void updateUserImage(UserProfileImageDto userProfileImageDto);
+	void updateUserProfile(UserProfileUpdateSaveDto userProfileUpdateSaveDto);
 
 	Page<CommentForRead> readRelyList(String parentCommentCode, Pageable pageable);
 

@@ -1,7 +1,6 @@
 package lookids.commentread.comment.application.port.dto;
 
 import java.time.Instant;
-import java.time.ZoneId;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -16,17 +15,19 @@ public class CommentReadResponseDto {
 	private String tag;
 	private String image;
 	private String content;
+	private Integer replyCount;
 	private Instant createdAt;
 
 	@Builder
 	public CommentReadResponseDto(String commentCode, String userUuid, String content, Instant createdAt,
-		String nickname, String image, String tag) {
+		String nickname, String image, String tag, Integer replyCount) {
 		this.commentCode = commentCode;
 		this.userUuid = userUuid;
 		this.content = content;
-		this.createdAt = createdAt.atZone(ZoneId.of("UTC")).toInstant();
+		this.createdAt = createdAt;
 		this.nickname = nickname;
 		this.tag = tag;
 		this.image = image;
+		this.replyCount = replyCount;
 	}
 }

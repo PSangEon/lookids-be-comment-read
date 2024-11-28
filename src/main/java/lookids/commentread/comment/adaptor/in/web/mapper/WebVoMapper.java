@@ -17,6 +17,7 @@ public class WebVoMapper {
 			.nickname(commentReadResponseDto.getNickname())
 			.tag(commentReadResponseDto.getTag())
 			.image(commentReadResponseDto.getImage())
+			.replyCount(commentReadResponseDto.getReplyCount())
 			.build();
 	}
 }

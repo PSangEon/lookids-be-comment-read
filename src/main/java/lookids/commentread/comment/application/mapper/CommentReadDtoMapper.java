@@ -2,6 +2,7 @@ package lookids.commentread.comment.application.mapper;
 
 import java.util.List;
 
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import lookids.commentread.comment.adaptor.in.kafka.event.CommentEvent;
@@ -16,6 +17,7 @@ import lookids.commentread.comment.application.port.dto.CommentReadUpdateDto;
 import lookids.commentread.comment.application.port.dto.ReplyCreateEventDto;
 import lookids.commentread.comment.application.port.dto.UserProfileImageDto;
 import lookids.commentread.comment.application.port.dto.UserProfileNicknameDto;
+import lookids.commentread.comment.application.port.dto.UserProfileUpdateSaveDto;
 import lookids.commentread.comment.domain.model.CommentForRead;
 import lookids.commentread.comment.domain.model.ReplyForRead;
 
@@ -31,11 +33,12 @@ public class CommentReadDtoMapper {
 			.nickname(commentForRead.getNickname())
 			.tag(commentForRead.getTag())
 			.image(commentForRead.getImage())
+			.replyCount(commentForRead.getReplyCount())
 			.replyForReadList(commentForRead.getReplyForReadList())
 			.build();
 	}
 
-	public CommentReadUpdateDto toCommentReadUpdateDto(CommentForRead commentForRead) {
+	public CommentReadUpdateDto toCommentReadUpdateDto(CommentForRead commentForRead, Integer size) {
 		return CommentReadUpdateDto.builder()
 			.id(commentForRead.getId())
 			.commentCode(commentForRead.getCommentCode())
@@ -46,6 +49,7 @@ public class CommentReadDtoMapper {
 			.nickname(commentForRead.getNickname())
 			.tag(commentForRead.getTag())
 			.image(commentForRead.getImage())
+			.replyCount(size)
 			.replyForReadList(commentForRead.getReplyForReadList())
 			.build();
 	}
@@ -73,6 +77,7 @@ public class CommentReadDtoMapper {
 			.nickname(commentForRead.getNickname())
 			.tag(commentForRead.getTag())
 			.image(commentForRead.getImage())
+			.replyCount(commentForRead.getReplyCount())
 			.build();
 	}
 
@@ -127,5 +132,9 @@ public class CommentReadDtoMapper {
 			.userUuid(profileImageEvent.getUuid())
 			.image(profileImageEvent.getImage())
 			.build();
+	}
+
+	public UserProfileUpdateSaveDto toProfileUpdateSaveDto(String uuid, Update update) {
+		return UserProfileUpdateSaveDto.builder().userUuid(uuid).update(update).build();
 	}
 }
