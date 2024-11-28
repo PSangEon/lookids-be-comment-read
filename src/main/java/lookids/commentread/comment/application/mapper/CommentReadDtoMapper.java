@@ -11,10 +11,13 @@ import lookids.commentread.comment.adaptor.in.kafka.event.ProfileImageEvent;
 import lookids.commentread.comment.adaptor.in.kafka.event.ReplyEvent;
 import lookids.commentread.comment.adaptor.in.kafka.event.UserProfileEvent;
 import lookids.commentread.comment.application.port.dto.CommentCreateEventDto;
+import lookids.commentread.comment.application.port.dto.CommentDeleteDto;
+import lookids.commentread.comment.application.port.dto.CommentDeleteSaveDto;
 import lookids.commentread.comment.application.port.dto.CommentReadResponseDto;
 import lookids.commentread.comment.application.port.dto.CommentReadSaveDto;
 import lookids.commentread.comment.application.port.dto.CommentReadUpdateDto;
 import lookids.commentread.comment.application.port.dto.ReplyCreateEventDto;
+import lookids.commentread.comment.application.port.dto.ReplyDeleteDto;
 import lookids.commentread.comment.application.port.dto.UserProfileImageDto;
 import lookids.commentread.comment.application.port.dto.UserProfileNicknameDto;
 import lookids.commentread.comment.application.port.dto.UserProfileUpdateSaveDto;
@@ -136,5 +139,27 @@ public class CommentReadDtoMapper {
 
 	public UserProfileUpdateSaveDto toProfileUpdateSaveDto(String uuid, Update update) {
 		return UserProfileUpdateSaveDto.builder().userUuid(uuid).update(update).build();
+	}
+
+	public CommentDeleteDto toCommentDeleteDto(CommentEvent commentEvent) {
+		return CommentDeleteDto.builder()
+			.commentCode(commentEvent.getCommentCode())
+			.feedCode(commentEvent.getFeedCode())
+			.build();
+	}
+
+	public ReplyDeleteDto toReplyDeleteDto(ReplyEvent replyEvent) {
+		return ReplyDeleteDto.builder()
+			.commentCode(replyEvent.getCommentCode())
+			.parentCommentCode(replyEvent.getParentCommentCode())
+			.build();
+	}
+
+	public CommentDeleteSaveDto toCommentDeleteSaveDto(CommentDeleteDto commentDeleteDto, Integer totalToDelete) {
+		return CommentDeleteSaveDto.builder()
+			.commentCode(commentDeleteDto.getCommentCode())
+			.feedCode(commentDeleteDto.getFeedCode())
+			.totalToDelete(totalToDelete)
+			.build();
 	}
 }

@@ -17,8 +17,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lookids.commentread.comment.adaptor.out.infrastructure.entity.CommentReadEntity;
 import lookids.commentread.comment.adaptor.out.infrastructure.mapper.CommentEntityMapper;
+import lookids.commentread.comment.application.port.dto.CommentDeleteSaveDto;
 import lookids.commentread.comment.application.port.dto.CommentReadSaveDto;
 import lookids.commentread.comment.application.port.dto.CommentReadUpdateDto;
+import lookids.commentread.comment.application.port.dto.ReplyDeleteDto;
 import lookids.commentread.comment.application.port.dto.UserProfileUpdateSaveDto;
 import lookids.commentread.comment.application.port.out.CommentRepositoryPort;
 import lookids.commentread.comment.domain.model.CommentForRead;
@@ -48,11 +50,6 @@ public class CommentRepositoryImpl implements CommentRepositoryPort {
 	public Page<CommentForRead> readCommentList(String feedCode, Pageable pageable) {
 
 		return commentEntityMapper.toDomainPage(commentReadMongoRepository.findByFeedCode(feedCode, pageable));
-	}
-
-	@Override
-	public Page<CommentForRead> readRelyList(String parentCommentCode, Pageable pageable) {
-		return commentEntityMapper.toDomainPage(commentReadMongoRepository.findByFeedCode(parentCommentCode, pageable));
 	}
 
 	@Override
@@ -89,4 +86,22 @@ public class CommentRepositoryImpl implements CommentRepositoryPort {
 		Update update = new Update().inc("totalCommentCount", change); // totalCommentCount 증감
 		mongoTemplate.upsert(feedQuery, update, "feed_entity");
 	}
+
+	@Override
+	public void deleteComment(CommentDeleteSaveDto commentDeleteSaveDto) {
+		// 댓글과 대댓글을 포함한 삭제
+		mongoTemplate.remove(Query.query(Criteria.where("commentCode").is(commentDeleteSaveDto.getCommentCode())),
+			"comments");
+		updateFeedCommentCount(commentDeleteSaveDto.getFeedCode(), -commentDeleteSaveDto.getTotalToDelete());
+	}
+
+	@Override
+	public void deleteReply(ReplyDeleteDto replyDeleteDto) {
+		// replyList에서 특정 대댓글 삭제
+		mongoTemplate.updateFirst(
+			Query.query(Criteria.where("replyList.commentCode").is(replyDeleteDto.getCommentCode())),
+			new Update().pull("replyList",
+				Query.query(Criteria.where("commentCode").is(replyDeleteDto.getCommentCode()))), "comments");
+	}
+
 }

@@ -14,6 +14,7 @@ import lookids.commentread.comment.adaptor.in.kafka.event.ProfileImageEvent;
 import lookids.commentread.comment.adaptor.in.kafka.event.ReplyEvent;
 import lookids.commentread.comment.adaptor.in.kafka.event.UserProfileEvent;
 import lookids.commentread.comment.application.mapper.CommentReadDtoMapper;
+import lookids.commentread.comment.application.port.in.CommentDeleteUseCase;
 import lookids.commentread.comment.application.port.in.CommentReadCreateUseCase;
 import lookids.commentread.comment.application.port.in.UserProfileUpdateUseCase;
 
@@ -25,6 +26,8 @@ public class KafkaConsumerController {
 	private final CommentReadCreateUseCase commentReadCreateUseCase;
 
 	private final UserProfileUpdateUseCase userProfileUpdateUseCase;
+
+	private final CommentDeleteUseCase commentDeleteUseCase;
 
 	private final CommentReadDtoMapper commentReadDtoMapper;
 
@@ -62,7 +65,7 @@ public class KafkaConsumerController {
 			key -> new CompletableFuture<>());
 
 		userProfileEventFuture.complete(userProfileEvent);
-		log.info("createUserProfile: {}", userProfileEvent);
+		log.info("userProfileEvent: {}", userProfileEvent);
 
 		checkAndCreateCommentEventListener(userUuid);
 	}
@@ -78,6 +81,18 @@ public class KafkaConsumerController {
 		log.info("consumeReplyCommentEvent: {}", replyEvent);
 
 		checkAndCreateReplyEventListener(userUuid);
+	}
+
+	@KafkaListener(topics = "comment-delete", groupId = "comment-read-group", containerFactory = "commentEventListenerContainerFactory")
+	public void consumeCommentDeleteEvent(CommentEvent commentEvent) {
+		log.info("commentEvent: {}", commentEvent);
+		commentDeleteUseCase.deleteComment(commentReadDtoMapper.toCommentDeleteDto(commentEvent));
+	}
+
+	@KafkaListener(topics = "comment-reply-delete", groupId = "comment-read-group", containerFactory = "replyEventListenerContainerFactory")
+	public void consumeReplyDeleteEvent(ReplyEvent replyEvent) {
+		log.info("replyEvent: {}", replyEvent);
+		commentDeleteUseCase.deleteReply(commentReadDtoMapper.toReplyDeleteDto(replyEvent));
 	}
 
 	@KafkaListener(topics = "comment-reply-create-join-userprofile", groupId = "comment-read-group", containerFactory = "userProfileEventListenerContainerFactory")
