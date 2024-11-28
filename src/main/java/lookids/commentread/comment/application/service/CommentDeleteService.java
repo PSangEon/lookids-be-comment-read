@@ -1,6 +1,7 @@
 package lookids.commentread.comment.application.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lookids.commentread.comment.application.mapper.CommentReadDtoMapper;
@@ -33,7 +34,15 @@ public class CommentDeleteService implements CommentDeleteUseCase {
 	}
 
 	@Override
+	@Transactional
 	public void deleteReply(ReplyDeleteDto replyDeleteDto) {
+		// 대댓글 삭제
 		commentRepositoryPort.deleteReply(replyDeleteDto);
+
+		// 대댓글을 포함한 댓글의 feedCode를 사용하여 피드의 댓글 수 갱신
+		String feedCode = commentRepositoryPort.getFeedCodeByComment(replyDeleteDto.getCommentCode());
+		if (feedCode != null) {
+			commentRepositoryPort.updateFeedCommentCount(feedCode, -1);
+		}
 	}
 }

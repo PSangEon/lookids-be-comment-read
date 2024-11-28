@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.mongodb.client.model.UpdateOptions;
 
@@ -36,14 +35,12 @@ public class CommentRepositoryImpl implements CommentRepositoryPort {
 	private final CommentReadMongoRepository commentReadMongoRepository;
 
 	@Override
-	@Transactional
 	public void createComment(CommentReadSaveDto commentReadSaveDto) {
 		mongoTemplate.save(commentEntityMapper.toEntity(commentReadSaveDto));
 		updateFeedCommentCount(commentReadSaveDto.getFeedCode(), 1);
 	}
 
 	@Override
-	@Transactional
 	public void updateComment(CommentReadUpdateDto commentReadUpdateDto) {
 		mongoTemplate.save(commentEntityMapper.toUpdateEntity(commentReadUpdateDto));
 		updateFeedCommentCount(commentReadUpdateDto.getFeedCode(), 1);
@@ -84,19 +81,12 @@ public class CommentRepositoryImpl implements CommentRepositoryPort {
 			.updateMany(replyQuery.getQueryObject(), userProfileUpdateSaveDto.getUpdate().getUpdateObject(), options);
 	}
 
-	public void updateFeedCommentCount(String feedCode, int change) {
-		Query feedQuery = new Query(Criteria.where("feedCode").is(feedCode));
-		Update update = new Update().inc("totalCommentCount", change); // totalCommentCount 증감
-		mongoTemplate.upsert(feedQuery, update, "feed_entity");
-	}
-
 	public void updateReplyCount(String parentCommentCode, int change) {
 		mongoTemplate.updateFirst(Query.query(Criteria.where("commentCode").is(parentCommentCode)),
 			new Update().inc("replyCount", change), "comment_entity");
 	}
 
 	@Override
-	@Transactional
 	public void deleteComment(CommentDeleteSaveDto commentDeleteSaveDto) {
 		// 댓글과 대댓글을 포함한 삭제
 		mongoTemplate.remove(Query.query(Criteria.where("commentCode").is(commentDeleteSaveDto.getCommentCode())),
@@ -105,13 +95,28 @@ public class CommentRepositoryImpl implements CommentRepositoryPort {
 	}
 
 	@Override
-	@Transactional
 	public void deleteReply(ReplyDeleteDto replyDeleteDto) {
-		// replyList에서 특정 대댓글 삭제
-		mongoTemplate.updateFirst(
-			Query.query(Criteria.where("replyList.commentCode").is(replyDeleteDto.getCommentCode())),
-			new Update().pull("replyList",
-				Query.query(Criteria.where("commentCode").is(replyDeleteDto.getCommentCode()))), "comment_entity");
-		updateReplyCount(replyDeleteDto.getParentCommentCode(), -1);
+		// 댓글에서 대댓글 삭제 및 replyCount 감소
+		Query query = Query.query(Criteria.where("replyList.commentCode").is(replyDeleteDto.getCommentCode()));
+		Update update = new Update().pull("replyList",
+			Query.query(Criteria.where("commentCode").is(replyDeleteDto.getCommentCode()))).inc("replyCount", -1);
+
+		mongoTemplate.updateFirst(query, update, "comment_entity");
+	}
+
+	@Override
+	public String getFeedCodeByComment(String commentCode) {
+		// 부모 댓글의 feedCode 조회
+		CommentReadEntity parentComment = mongoTemplate.findOne(
+			Query.query(Criteria.where("commentCode").is(commentCode)), CommentReadEntity.class);
+		return parentComment != null ? parentComment.getFeedCode() : null;
+	}
+
+	@Override
+	public void updateFeedCommentCount(String feedCode, int change) {
+		// 피드의 댓글 수 갱신
+		Query feedQuery = new Query(Criteria.where("feedCode").is(feedCode));
+		Update update = new Update().inc("totalCommentCount", change); // 댓글 수 증감
+		mongoTemplate.upsert(feedQuery, update, "feed_entity");
 	}
 }

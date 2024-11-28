@@ -25,4 +25,8 @@ public interface CommentRepositoryPort {
 	void deleteComment(CommentDeleteSaveDto commentDeleteSaveDto);
 
 	void deleteReply(ReplyDeleteDto replyDeleteDto);
+
+	String getFeedCodeByComment(String commentCode);
+
+	void updateFeedCommentCount(String feedCode, int change);
 }
