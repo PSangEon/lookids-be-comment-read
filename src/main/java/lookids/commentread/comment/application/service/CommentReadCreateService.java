@@ -30,6 +30,7 @@ public class CommentReadCreateService implements CommentReadCreateUseCase {
 			.createdAt(commentCreateEventDto.getCreatedAt())
 			.userUuid(commentCreateEventDto.getUserUuid())
 			.nickname(commentCreateEventDto.getNickname())
+			.tag(commentCreateEventDto.getTag())
 			.image(commentCreateEventDto.getImage())
 			.replyForReadList(new ArrayList<>())
 			.replyCount(0)
@@ -49,6 +50,7 @@ public class CommentReadCreateService implements CommentReadCreateUseCase {
 			.createdAt(commentCreateEventDto.getCreatedAt())
 			.userUuid(commentCreateEventDto.getUserUuid())
 			.nickname(commentCreateEventDto.getNickname())
+			.tag(commentForRead.getTag())
 			.profileImg(commentCreateEventDto.getImage())
 			.build();
 		commentForRead.getReplyForReadList().add(replyForRead);

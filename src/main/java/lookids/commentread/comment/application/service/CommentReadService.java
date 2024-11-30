@@ -14,7 +14,6 @@ import lookids.commentread.comment.application.port.dto.CommentReadResponseDto;
 import lookids.commentread.comment.application.port.in.CommentReadUseCase;
 import lookids.commentread.comment.application.port.out.CommentRepositoryPort;
 import lookids.commentread.comment.domain.model.CommentForRead;
-import lookids.commentread.common.dto.PageResponseDto;
 
 @RequiredArgsConstructor
 @Service
@@ -23,15 +22,16 @@ public class CommentReadService implements CommentReadUseCase {
 	private final CommentReadDtoMapper commentReadDtoMapper;
 
 	@Override
-	public PageResponseDto readCommentList(String feedCode, int page, int size) {
+	public Page<CommentReadResponseDto> readCommentList(String feedCode, int page, int size) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 		Page<CommentForRead> commentList = commentRepositoryPort.readCommentList(feedCode, pageable);
 
-		List<CommentReadResponseDto> responseDtoList = commentList.stream()
-			.map(commentReadDtoMapper::toCommentReadResponseDto) // 메서드 참조 사용
-			.toList();
-
-		return PageResponseDto.toDto(page, commentList.getTotalPages(), commentList.hasNext(), responseDtoList);
+		// List<CommentReadResponseDto> responseDtoList = commentList.stream()
+		// 	.map(commentReadDtoMapper::toCommentReadResponseDto) // 메서드 참조 사용
+		// 	.toList();
+		//
+		// return PageResponseDto.toDto(page, commentList.getTotalPages(), commentList.hasNext(), responseDtoList);
+		return commentList.map(commentReadDtoMapper::toCommentReadResponseDto);
 	}
 
 	@Override
