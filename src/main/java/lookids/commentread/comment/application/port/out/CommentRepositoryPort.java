@@ -9,6 +9,7 @@ import lookids.commentread.comment.application.port.dto.CommentReadUpdateDto;
 import lookids.commentread.comment.application.port.dto.ReplyDeleteDto;
 import lookids.commentread.comment.application.port.dto.UserProfileUpdateSaveDto;
 import lookids.commentread.comment.domain.model.CommentForRead;
+import lookids.commentread.comment.domain.model.FeedCount;
 
 public interface CommentRepositoryPort {
 
@@ -29,4 +30,6 @@ public interface CommentRepositoryPort {
 	String getFeedCodeByComment(String commentCode);
 
 	void updateFeedCommentCount(String feedCode, int change);
+
+	FeedCount readCommentCount(String feedCode);
 }

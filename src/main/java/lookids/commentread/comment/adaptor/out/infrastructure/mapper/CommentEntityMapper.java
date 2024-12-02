@@ -5,9 +5,11 @@ import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 import lookids.commentread.comment.adaptor.out.infrastructure.entity.CommentReadEntity;
+import lookids.commentread.comment.adaptor.out.infrastructure.entity.FeedEntity;
 import lookids.commentread.comment.application.port.dto.CommentReadSaveDto;
 import lookids.commentread.comment.application.port.dto.CommentReadUpdateDto;
 import lookids.commentread.comment.domain.model.CommentForRead;
+import lookids.commentread.comment.domain.model.FeedCount;
 
 @Slf4j
 @Component
@@ -73,5 +75,12 @@ public class CommentEntityMapper {
 			.tag(commentReadEntity.getTag())
 			.image(commentReadEntity.getProfileImg())
 			.build());
+	}
+
+	public FeedCount toCountDomain(FeedEntity feedEntity) {
+		return FeedCount.builder()
+			.feedCode(feedEntity.getId())
+			.totalCommentCount(feedEntity.getTotalCommentCount())
+			.build();
 	}
 }

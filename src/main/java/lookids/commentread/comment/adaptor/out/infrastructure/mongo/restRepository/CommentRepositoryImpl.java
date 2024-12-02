@@ -16,6 +16,7 @@ import com.mongodb.client.model.UpdateOptions;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lookids.commentread.comment.adaptor.out.infrastructure.entity.CommentReadEntity;
+import lookids.commentread.comment.adaptor.out.infrastructure.entity.FeedEntity;
 import lookids.commentread.comment.adaptor.out.infrastructure.mapper.CommentEntityMapper;
 import lookids.commentread.comment.application.port.dto.CommentDeleteSaveDto;
 import lookids.commentread.comment.application.port.dto.CommentReadSaveDto;
@@ -24,6 +25,9 @@ import lookids.commentread.comment.application.port.dto.ReplyDeleteDto;
 import lookids.commentread.comment.application.port.dto.UserProfileUpdateSaveDto;
 import lookids.commentread.comment.application.port.out.CommentRepositoryPort;
 import lookids.commentread.comment.domain.model.CommentForRead;
+import lookids.commentread.comment.domain.model.FeedCount;
+import lookids.commentread.common.entity.BaseResponseStatus;
+import lookids.commentread.common.exception.BaseException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -118,5 +122,17 @@ public class CommentRepositoryImpl implements CommentRepositoryPort {
 		Query feedQuery = new Query(Criteria.where("feedCode").is(feedCode));
 		Update update = new Update().inc("totalCommentCount", change); // 댓글 수 증감
 		mongoTemplate.upsert(feedQuery, update, "feed_entity");
+	}
+
+	@Override
+	public FeedCount readCommentCount(String feedCode) {
+		FeedEntity feedEntity = mongoTemplate.findOne(new Query(Criteria.where("feedCode").is(feedCode)),
+			FeedEntity.class, "feed_entity");
+
+		if (feedEntity == null) {
+			throw new BaseException(BaseResponseStatus.NO_EXIST_DATA);
+		}
+
+		return commentEntityMapper.toCountDomain(feedEntity);
 	}
 }

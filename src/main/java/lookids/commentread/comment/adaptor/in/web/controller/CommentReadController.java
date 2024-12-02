@@ -12,8 +12,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lookids.commentread.comment.adaptor.in.web.mapper.WebVoMapper;
+import lookids.commentread.comment.adaptor.in.web.vo.out.CommentCountResponseVo;
 import lookids.commentread.comment.adaptor.in.web.vo.out.CommentReadResponseVo;
+import lookids.commentread.comment.adaptor.in.web.vo.out.ReplyReadResponseVo;
 import lookids.commentread.comment.application.port.dto.CommentReadResponseDto;
+import lookids.commentread.comment.application.port.dto.ReplyReadResponseDto;
 import lookids.commentread.comment.application.port.in.CommentReadUseCase;
 import lookids.commentread.common.entity.BaseResponse;
 
@@ -39,17 +42,24 @@ public class CommentReadController {
 		return new BaseResponse<>(commentReadResponseDtoPage.map(webVoMapper::toCommentReadResponseVo));
 	}
 
+	@Operation(summary = "readCommentCount API", description = "readCommentCount API 입니다.")
+	@GetMapping("/count")
+	public BaseResponse<CommentCountResponseVo> readCommentCount(
+		@RequestParam(value = "feedCode") String feedCode) {  //한번에 몇개를 가지고 올지..20개를 갖고 올거.
+		log.info("요청받음 : {}", feedCode);
+		// 조회할 피드코드를 서비스 함수에 파라미터로 넘겨줌
+
+		return new BaseResponse<>(webVoMapper.toCommentCountResponseVo(commentReadUseCase.readCommentCount(feedCode)));
+	}
+
 	@Operation(summary = "readCommentList API", description = "readReplyList API 입니다.")
 	@GetMapping("/reply")
-	public BaseResponse<List<CommentReadResponseVo>> readReplyList(
+	public BaseResponse<List<ReplyReadResponseVo>> readReplyList(
 		@RequestParam(value = "commentCode") String commentCode) {
 		log.info("요청받음 : {}", commentCode);
 		// 조회할 부모 댓글코드를 서비스 함수에 파라미터로 넘겨줌
+		List<ReplyReadResponseDto> replyReadResponseDtoList = commentReadUseCase.readReplyList(commentCode);
 
-		List<CommentReadResponseDto> commentReadResponseDtoList = commentReadUseCase.readReplyList(commentCode);
-
-		return new BaseResponse<>(
-			commentReadResponseDtoList.stream().map(webVoMapper::toCommentReadResponseVo) // 메서드 참조 사용
-				.toList());
+		return new BaseResponse<>(replyReadResponseDtoList.stream().map(webVoMapper::toReplyReadResponseVo).toList());
 	}
 }

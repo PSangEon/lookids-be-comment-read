@@ -10,6 +10,7 @@ import lookids.commentread.comment.adaptor.in.kafka.event.NicknameEvent;
 import lookids.commentread.comment.adaptor.in.kafka.event.ProfileImageEvent;
 import lookids.commentread.comment.adaptor.in.kafka.event.ReplyEvent;
 import lookids.commentread.comment.adaptor.in.kafka.event.UserProfileEvent;
+import lookids.commentread.comment.application.port.dto.CommentCountResponseDto;
 import lookids.commentread.comment.application.port.dto.CommentCreateEventDto;
 import lookids.commentread.comment.application.port.dto.CommentDeleteDto;
 import lookids.commentread.comment.application.port.dto.CommentDeleteSaveDto;
@@ -18,10 +19,12 @@ import lookids.commentread.comment.application.port.dto.CommentReadSaveDto;
 import lookids.commentread.comment.application.port.dto.CommentReadUpdateDto;
 import lookids.commentread.comment.application.port.dto.ReplyCreateEventDto;
 import lookids.commentread.comment.application.port.dto.ReplyDeleteDto;
+import lookids.commentread.comment.application.port.dto.ReplyReadResponseDto;
 import lookids.commentread.comment.application.port.dto.UserProfileImageDto;
 import lookids.commentread.comment.application.port.dto.UserProfileNicknameDto;
 import lookids.commentread.comment.application.port.dto.UserProfileUpdateSaveDto;
 import lookids.commentread.comment.domain.model.CommentForRead;
+import lookids.commentread.comment.domain.model.FeedCount;
 import lookids.commentread.comment.domain.model.ReplyForRead;
 
 @Component
@@ -84,8 +87,8 @@ public class CommentReadDtoMapper {
 			.build();
 	}
 
-	public CommentReadResponseDto toReplyReadResponseDto(ReplyForRead replyForRead) {
-		return CommentReadResponseDto.builder()
+	public ReplyReadResponseDto toReplyReadResponseDto(ReplyForRead replyForRead) {
+		return ReplyReadResponseDto.builder()
 			.commentCode(replyForRead.getCommentCode())
 			.content(replyForRead.getContent())
 			.createdAt(replyForRead.getCreatedAt())
@@ -160,6 +163,13 @@ public class CommentReadDtoMapper {
 			.commentCode(commentDeleteDto.getCommentCode())
 			.feedCode(commentDeleteDto.getFeedCode())
 			.totalToDelete(totalToDelete)
+			.build();
+	}
+
+	public CommentCountResponseDto toCommentCountResponseDto(FeedCount feedCount) {
+		return CommentCountResponseDto.builder()
+			.feedCode(feedCount.getFeedCode())
+			.commentCount(feedCount.getTotalCommentCount())
 			.build();
 	}
 }

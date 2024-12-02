@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CommentReadResponseVo {
+public class ReplyReadResponseVo {
 	private String commentCode;
 	private String uuid;
 	private String nickname;
@@ -15,5 +15,4 @@ public class CommentReadResponseVo {
 	private String image;
 	private String content;
 	private Instant createdAt;
-	private Integer replyCount;
 }
