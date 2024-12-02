@@ -73,6 +73,7 @@ public class CommentEntityMapper {
 			.createdAt(commentReadEntity.getCreatedAt())
 			.nickname(commentReadEntity.getNickname())
 			.tag(commentReadEntity.getTag())
+			.replyCount(commentReadEntity.getReplyCount())
 			.image(commentReadEntity.getProfileImg())
 			.build());
 	}
