@@ -84,4 +84,8 @@ public class CommentEntityMapper {
 			.totalCommentCount(feedEntity.getTotalCommentCount())
 			.build();
 	}
+
+	public FeedCount toNullCountDomain(String feedCode) {
+		return FeedCount.builder().feedCode(feedCode).totalCommentCount(0).build();
+	}
 }

@@ -32,7 +32,7 @@ public class CommentReadController {
 	@GetMapping()
 	public BaseResponse<Page<CommentReadResponseVo>> readCommentList(@RequestParam(value = "feedCode") String feedCode,
 		@RequestParam(value = "page", defaultValue = "0") int page,
-		@RequestParam(value = "size", defaultValue = "20") int size) {  //한번에 몇개를 가지고 올지..20개를 갖고 올거.
+		@RequestParam(value = "size", defaultValue = "20") int size) {
 		log.info("요청받음 : {}", feedCode);
 		// 조회할 피드코드를 서비스 함수에 파라미터로 넘겨줌
 
@@ -44,8 +44,7 @@ public class CommentReadController {
 
 	@Operation(summary = "readCommentCount API", description = "readCommentCount API 입니다.")
 	@GetMapping("/count")
-	public BaseResponse<CommentCountResponseVo> readCommentCount(
-		@RequestParam(value = "feedCode") String feedCode) {  //한번에 몇개를 가지고 올지..20개를 갖고 올거.
+	public BaseResponse<CommentCountResponseVo> readCommentCount(@RequestParam(value = "feedCode") String feedCode) {
 		log.info("요청받음 : {}", feedCode);
 		// 조회할 피드코드를 서비스 함수에 파라미터로 넘겨줌
 

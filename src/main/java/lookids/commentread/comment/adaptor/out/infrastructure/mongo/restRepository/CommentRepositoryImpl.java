@@ -26,8 +26,6 @@ import lookids.commentread.comment.application.port.dto.UserProfileUpdateSaveDto
 import lookids.commentread.comment.application.port.out.CommentRepositoryPort;
 import lookids.commentread.comment.domain.model.CommentForRead;
 import lookids.commentread.comment.domain.model.FeedCount;
-import lookids.commentread.common.entity.BaseResponseStatus;
-import lookids.commentread.common.exception.BaseException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -130,7 +128,7 @@ public class CommentRepositoryImpl implements CommentRepositoryPort {
 			FeedEntity.class, "feed_entity");
 
 		if (feedEntity == null) {
-			throw new BaseException(BaseResponseStatus.NO_EXIST_DATA);
+			return commentEntityMapper.toNullCountDomain(feedCode);
 		}
 
 		return commentEntityMapper.toCountDomain(feedEntity);
